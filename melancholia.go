@@ -26,13 +26,9 @@ func createRoutes() {
   for method, routes := range m {
     for route, function := range routes {
       log.Printf("Creating route %s with method %s", route, method)
-      createHandler(method, route, function)
+      http.HandleFunc(route, function)
     }
   }
-}
-
-func createHandler(method string, route string, function ApiFunc) {
-  http.HandleFunc(route, function)
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
