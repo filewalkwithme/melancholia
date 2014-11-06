@@ -11,6 +11,9 @@ type ApiFunc func(w http.ResponseWriter, r *http.Request)
 
 func main() {
   createRoutes()
+
+  log.Println("Listening on :4242")
+  http.ListenAndServe(":4242", nil)
 }
 
 func createRoutes() {
@@ -35,10 +38,6 @@ func createRoutes() {
       gmux.HandleFunc(route, function).Methods(method)
     }
   }
-
-  log.Println("Listening on :4242")
-  http.ListenAndServe(":4242", nil)
-
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
