@@ -10,13 +10,13 @@ import (
 type ApiFunc func(w http.ResponseWriter, r *http.Request)
 
 func main() {
-  createRoutes()
+  CreateRoutes()
 
   log.Println("Listening on :4242")
   http.ListenAndServe(":4242", nil)
 }
 
-func createRoutes() {
+func CreateRoutes() {
 
   gmux := mux.NewRouter()
 
