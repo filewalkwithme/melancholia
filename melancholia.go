@@ -1,53 +1,53 @@
 package main
 
 import (
-  "fmt"
-  "net/http"
-  "log"
-  "github.com/gorilla/mux"
+	"fmt"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 )
 
 type ApiFunc func(w http.ResponseWriter, r *http.Request)
 
 func main() {
-  CreateRoutes()
+	CreateRoutes()
 
-  log.Println("Listening on :4242")
-  http.ListenAndServe(":4242", nil)
+	log.Println("Listening on :4242")
+	http.ListenAndServe(":4242", nil)
 }
 
 func CreateRoutes() {
 
-  gmux := mux.NewRouter()
+	gmux := mux.NewRouter()
 
-  http.Handle("/", gmux)
+	http.Handle("/", gmux)
 
-  m := map[string]map[string]ApiFunc{
-    "GET": {
-      "/ping": ping,
-      "/pong": pong,
-    },
-    "POST": {
-      "/authenticate": authenticate,
-    },
-  }
+	m := map[string]map[string]ApiFunc{
+		"GET": {
+			"/ping": ping,
+			"/pong": pong,
+		},
+		"POST": {
+			"/authenticate": authenticate,
+		},
+	}
 
-  for method, routes := range m {
-    for route, function := range routes {
-      log.Printf("Creating route %s with method %s", route, method)
-      gmux.HandleFunc(route, function).Methods(method)
-    }
-  }
+	for method, routes := range m {
+		for route, function := range routes {
+			log.Printf("Creating route %s with method %s", route, method)
+			gmux.HandleFunc(route, function).Methods(method)
+		}
+	}
 }
 
 func ping(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "I'm ping @ %s", r.URL.Path[1:])
+	fmt.Fprintf(w, "I'm ping @ %s", r.URL.Path[1:])
 }
 
 func pong(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "I'm pong @ %s", r.URL.Path[1:])
+	fmt.Fprintf(w, "I'm pong @ %s", r.URL.Path[1:])
 }
 
 func authenticate(w http.ResponseWriter, r *http.Request) {
-  fmt.Fprintf(w, "I'm authenticate @ %s", r.URL.Path[1:])
+	fmt.Fprintf(w, "I'm authenticate @ %s", r.URL.Path[1:])
 }
