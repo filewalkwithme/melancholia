@@ -1,9 +1,7 @@
 package melancholia
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
-	"log"
 	"net/http"
 )
 
@@ -17,30 +15,38 @@ func CreateRoutes() {
 
 	m := map[string]map[string]ApiFunc{
 		"GET": {
-			"/ping": ping,
-			"/pong": pong,
+			"/users": users,
 		},
 		"POST": {
-			"/authenticate": authenticate,
+			"/users": createUser,
+		},
+		"DELETE": {
+			"/users": deleteUser,
+		},
+		"PUT": {
+			"/users": updateUser,
 		},
 	}
 
 	for method, routes := range m {
 		for route, function := range routes {
-			log.Printf("Creating route %s with method %s", route, method)
 			gmux.HandleFunc(route, function).Methods(method)
 		}
 	}
 }
 
-func ping(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "I'm ping @ %s", r.URL.Path[1:])
+func users(w http.ResponseWriter, r *http.Request) {
+	// 
 }
 
-func pong(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "I'm pong @ %s", r.URL.Path[1:])
+func createUser(w http.ResponseWriter, r *http.Request) {
+	//
 }
 
-func authenticate(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "I'm authenticate @ %s", r.URL.Path[1:])
+func updateUser(w http.ResponseWriter, r *http.Request) {
+	//
+}
+
+func deleteUser(w http.ResponseWriter, r *http.Request) {
+	//
 }
