@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gerep/melancholia"
+	"github.com/gerep/melancholia/router"
 	"net/http"
 )
 
