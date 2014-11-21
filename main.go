@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	melancholia.CreateRoutes()
+	router.CreateRoutes()
 	http.ListenAndServe(":4242", nil)
 }
