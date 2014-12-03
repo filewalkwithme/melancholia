@@ -15,11 +15,12 @@ func (u User) Save() (user User, err error) {
 	var id int
 	err = u.DB.QueryRow("INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id", u.Name, u.Email, u.Password).Scan(&id)
 	if err != nil {
-		panic(err)
+		return user, err
 	}
+
 	err = u.DB.QueryRow("SELECT id, email, name FROM users WHERE id = $1", id).Scan(&user.ID, &user.Name, &user.Email)
 	if err != nil {
-		panic(err)
+		return user, err
 	}
 	return user, nil
 }

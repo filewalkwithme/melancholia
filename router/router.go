@@ -69,16 +69,18 @@ func (r Router) createUser(w http.ResponseWriter, req *http.Request) {
 	password := req.FormValue("password")
 
 	user := models.User{Name: name, Email: email, Password: password, DB: r.DB}
-	new_user, err := user.Save()
+	result, err := user.Save()
+
 	if err != nil {
-		panic(err)
+		json.NewEncoder(w).Encode(err)
 	}
 
-	err = json.NewEncoder(w).Encode(new_user)
+	err = json.NewEncoder(w).Encode(result)
 	if err != nil {
 		panic(err)
 	}
 }
+
 
 func updateUser(w http.ResponseWriter, req *http.Request) {
 	//
