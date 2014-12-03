@@ -4,8 +4,10 @@ import (
 	"net/http"
 	"database/sql"
 	"fmt"
+	"encoding/json"
 
 	"github.com/gorilla/mux"
+	"github.com/gerep/melancholia/models"
 )
 
 type ApiFunc func(w http.ResponseWriter, req *http.Request)
@@ -62,6 +64,20 @@ func (r Router) users(w http.ResponseWriter, req *http.Request) {
 }
 
 func (r Router) createUser(w http.ResponseWriter, req *http.Request) {
+	name := req.FormValue("name")
+	email := req.FormValue("email")
+	password := req.FormValue("password")
+
+	user := models.User{Name: name, Email: email, Password: password, DB: r.DB}
+	new_user, err := user.Save()
+	if err != nil {
+		panic(err)
+	}
+
+	err = json.NewEncoder(w).Encode(new_user)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func updateUser(w http.ResponseWriter, req *http.Request) {
