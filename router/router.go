@@ -72,12 +72,9 @@ func (r Router) createUser(w http.ResponseWriter, req *http.Request) {
 	result, err := user.Save()
 
 	if err != nil {
-		json.NewEncoder(w).Encode(err)
-	}
-
-	err = json.NewEncoder(w).Encode(result)
-	if err != nil {
-		panic(err)
+		json.NewEncoder(w).Encode(err.Error())
+	} else {
+		json.NewEncoder(w).Encode(result)
 	}
 }
 
