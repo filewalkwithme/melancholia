@@ -38,7 +38,7 @@ func (u User) Save() (user User, err error) {
 		return user, err
 	}
 
-	err = u.DB.QueryRow("SELECT id, email, name FROM users WHERE id = $1", id).Scan(&user.ID, &user.Name, &user.Email)
+	err = u.DB.QueryRow("SELECT id, email, name FROM users WHERE id = $1", id).Scan(&user.ID, &user.Email, &user.Name)
 	if err != nil {
 		return user, err
 	}
