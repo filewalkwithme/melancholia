@@ -3,7 +3,6 @@ package models
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 
 	"github.com/gerep/melancholia/libs"
 	_ "github.com/lib/pq"
@@ -49,7 +48,6 @@ func (u User) Save() (user User, err error) {
 func (u User) Unique() (result bool) {
 	var id int
 	err := u.DB.QueryRow("SELECT id FROM users WHERE email = $1 LIMIT 1", u.Email).Scan(&id)
-	fmt.Println(err)
 	if err == sql.ErrNoRows {
 		return true
 	} else {
