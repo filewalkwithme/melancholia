@@ -13,41 +13,53 @@ type User struct {
 	ID, Name, Email, Password string
 }
 
-func (u User) Save() (user User, err error) {
+func (u User) Save() (User, error) {
 
-	if libs.MinSize(u.Name, 3) != true {
-		return user, errors.New(`{"error":"Name is too short"}`)
-	}
-	if libs.MaxSize(u.Name, 50) != true {
-		return user, errors.New(`{"error":"Name is too long"}`)
+	v := libs.Validation{}
+
+	if msg, err := v.MinSize(u.Name, 3).Message(`{"error":"Name is too short"}`); err != true {
+		return u, errors.New(msg)
 	}
 
-	if libs.MinSize(u.Email, 5) != true {
-		return user, errors.New(`{"error":"E-mail is too short"}`)
+	if msg, err := v.MaxSize(u.Name, 40).Message(`{"error":"Name is too long"}`); err != true {
+		return u, errors.New(msg)
 	}
-	if libs.MaxSize(u.Email, 50) != true {
-		return user, errors.New(`{"error":"Email is too long"}`)
+
+	if msg, err := v.MinSize(u.Email, 4).Message(`{"error":"Email is too short"}`); err != true {
+		return u, errors.New(msg)
 	}
-	if u.Unique() != true {
-		return user, errors.New(`{"error":"Email already used"}`)
+
+	if msg, err := v.MaxSize(u.Email, 40).Message(`{"error":"Email is too long"}`); err != true {
+		return u, errors.New(msg)
 	}
+
+	if msg, err := v.Unique("email", "users", u.Email, u.DB).Message(`{"error":"Email taken"}`); err != true {
+		return u, errors.New(msg)
+	}
+
+	// if u.Unique("email", "users", u.Email, u.DB) != true {
+	// 	return u, errors.New(`{"error":"Email already used"}`)
+	// }
 
 	var id int
-	err = u.DB.QueryRow("INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id", u.Name, u.Email, u.Password).Scan(&id)
+	err := u.DB.QueryRow("INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id", u.Name, u.Email, u.Password).Scan(&id)
 	if err != nil {
-		return user, err
+		return u, err
 	}
 
-	err = u.DB.QueryRow("SELECT id, email, name FROM users WHERE id = $1", id).Scan(&user.ID, &user.Email, &user.Name)
+	err = u.DB.QueryRow("SELECT id, email, name FROM users WHERE id = $1", id).Scan(&u.ID, &u.Email, &u.Name)
 	if err != nil {
-		return user, err
+		return u, err
 	}
-	return user, nil
+	return u, nil
 }
 
-func (u User) Unique() (result bool) {
+func (u User) Unique(what string, from string, value string, db *sql.DB) (result bool) {
 	var id int
-	err := u.DB.QueryRow("SELECT id FROM users WHERE email = $1 LIMIT 1", u.Email).Scan(&id)
+
+	query := "SELECT id FROM " + from + " WHERE " + what + " = '" + value + "'"
+
+	err := db.QueryRow(query).Scan(&id)
 	if err == sql.ErrNoRows {
 		return true
 	} else {
