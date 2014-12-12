@@ -49,17 +49,3 @@ func (u User) Save() (User, error) {
 	}
 	return u, nil
 }
-
-func (u User) Unique(what string, from string, value string, db *sql.DB) (result bool) {
-	var id int
-
-	query := "SELECT id FROM " + from + " WHERE " + what + " = '" + value + "'"
-
-	err := db.QueryRow(query).Scan(&id)
-	if err == sql.ErrNoRows {
-		return true
-	} else {
-		return false
-	}
-	return true
-}
