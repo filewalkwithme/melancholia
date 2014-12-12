@@ -37,10 +37,6 @@ func (u User) Save() (User, error) {
 		return u, errors.New(msg)
 	}
 
-	// if u.Unique("email", "users", u.Email, u.DB) != true {
-	// 	return u, errors.New(`{"error":"Email already used"}`)
-	// }
-
 	var id int
 	err := u.DB.QueryRow("INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id", u.Name, u.Email, u.Password).Scan(&id)
 	if err != nil {
