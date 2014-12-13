@@ -1,13 +1,13 @@
 package router
 
 import (
-	"net/http"
 	"database/sql"
 	"encoding/json"
+	"net/http"
 	"strconv"
 
-	"github.com/gorilla/mux"
 	"github.com/gerep/melancholia/models"
+	"github.com/gorilla/mux"
 )
 
 type ApiFunc func(w http.ResponseWriter, req *http.Request)
@@ -71,7 +71,6 @@ func (r Router) createUser(w http.ResponseWriter, req *http.Request) {
 		json.NewEncoder(w).Encode(result)
 	}
 }
-
 
 func updateUser(w http.ResponseWriter, req *http.Request) {
 	//

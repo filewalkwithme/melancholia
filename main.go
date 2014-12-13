@@ -1,8 +1,8 @@
 package main
 
 import (
-	"net/http"
 	"database/sql"
+	"net/http"
 
 	"github.com/gerep/melancholia/router"
 	_ "github.com/lib/pq"
