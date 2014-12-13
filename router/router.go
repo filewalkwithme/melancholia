@@ -24,7 +24,7 @@ func (r Router) CreateRoutes() {
 
 	m := map[string]map[string]ApiFunc{
 		"GET": {
-			"/users": r.users,
+			"/users/{id:[0-9]+}": r.getUser,
 		},
 		"POST": {
 			"/users": r.createUser,
@@ -44,33 +44,16 @@ func (r Router) CreateRoutes() {
 	}
 }
 
-func (r Router) users(w http.ResponseWriter, req *http.Request) {
-	rows, err := r.DB.Query("SELECT id, name, email FROM users")
+func (r Router) getUser(w http.ResponseWriter, req *http.Request) {
+	vars := mux.Vars(req)
+	id := vars["id"]
+	user := models.User{DB: r.DB, Id: id}
+	result, err := user.Get()
+
 	if err != nil {
-		panic(err)
-	}
-	defer rows.Close()
-
-	users := make([]models.User, 0)
-
-	var (
-		id int
-		name, email string
-	)
-
-	for rows.Next() {
-		rows_err := rows.Scan(&id, &name, &email)
-		if rows_err != nil {
-			panic(rows_err)
-		}
-
-		users = append(users, models.User{ID: strconv.Itoa(id), Name: name, Email: email})
-	}
-
-	if len(users) > 0 {
-		json.NewEncoder(w).Encode(users)
+		json.NewEncoder(w).Encode(err)
 	} else {
-		json.NewEncoder(w).Encode(`{}`)
+		json.NewEncoder(w).Encode(result)
 	}
 }
 
