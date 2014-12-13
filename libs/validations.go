@@ -2,6 +2,7 @@ package libs
 
 import (
 	"database/sql"
+	"net/mail"
 
 	_ "github.com/lib/pq"
 )
@@ -27,6 +28,14 @@ func (v Validation) MinSize(who string, size int) Validation {
 
 func (v Validation) MaxSize(who string, size int) Validation {
 	if len(who) > size {
+		return Validation{OK: false}
+	}
+	return Validation{OK: true}
+}
+
+func (v Validation) Email(email string) Validation {
+	_, err := mail.ParseAddress(email)
+	if err != nil {
 		return Validation{OK: false}
 	}
 	return Validation{OK: true}

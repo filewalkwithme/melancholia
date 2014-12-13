@@ -33,6 +33,10 @@ func (u User) Save() (User, error) {
 		return u, errors.New(msg)
 	}
 
+	if msg, err := v.Email(u.Email).Message(`{"error":"Invalid email"}`); err != true {
+		return u, errors.New(msg)
+	}	
+
 	if msg, err := v.Unique("email", "users", u.Email, u.DB).Message(`{"error":"Email taken"}`); err != true {
 		return u, errors.New(msg)
 	}
