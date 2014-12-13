@@ -3,8 +3,8 @@ package router
 import (
 	"net/http"
 	"database/sql"
-	"fmt"
 	"encoding/json"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/gerep/melancholia/models"
@@ -45,21 +45,32 @@ func (r Router) CreateRoutes() {
 }
 
 func (r Router) users(w http.ResponseWriter, req *http.Request) {
-	var (
-		id int
-		name string
-	)
-	rows, err := r.DB.Query("SELECT id, name FROM users")
+	rows, err := r.DB.Query("SELECT id, name, email FROM users")
 	if err != nil {
 		panic(err)
 	}
 	defer rows.Close()
+
+	users := make([]models.User, 0)
+
+	var (
+		id int
+		name, email string
+	)
+
 	for rows.Next() {
-		rows_err := rows.Scan(&id, &name)
+		rows_err := rows.Scan(&id, &name, &email)
 		if rows_err != nil {
 			panic(rows_err)
 		}
-		fmt.Println(id, name)
+
+		users = append(users, models.User{ID: strconv.Itoa(id), Name: name, Email: email})
+	}
+
+	if len(users) > 0 {
+		json.NewEncoder(w).Encode(users)
+	} else {
+		json.NewEncoder(w).Encode(`{}`)
 	}
 }
 
