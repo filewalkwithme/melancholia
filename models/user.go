@@ -17,7 +17,7 @@ func (u User) Save() (User, error) {
 
 	v := libs.Validation{}
 
-	if msg, err := v.MinSize(u.Name, 3).Message(`{"error":"Name is too short"}`); err != true {
+	if msg, err := v.MinSize(u.Name, 5).Message(`{"error":"Name is too short"}`); err != true {
 		return u, errors.New(msg)
 	}
 
@@ -25,7 +25,7 @@ func (u User) Save() (User, error) {
 		return u, errors.New(msg)
 	}
 
-	if msg, err := v.MinSize(u.Email, 4).Message(`{"error":"Email is too short"}`); err != true {
+	if msg, err := v.MinSize(u.Email, 5).Message(`{"error":"Email is too short"}`); err != true {
 		return u, errors.New(msg)
 	}
 
@@ -33,11 +33,11 @@ func (u User) Save() (User, error) {
 		return u, errors.New(msg)
 	}
 
-	if msg, err := v.Email(u.Email).Message(`{"error":"Invalid email"}`); err != true {
+	if msg, err := v.Email(u.Email).Message(`{"error":"Email is not valid"}`); err != true {
 		return u, errors.New(msg)
 	}
 
-	if msg, err := v.Unique("email", "users", u.Email, u.DB).Message(`{"error":"Email taken"}`); err != true {
+	if msg, err := v.Unique("email", "users", u.Email, u.DB).Message(`{"error":"Email is taken"}`); err != true {
 		return u, errors.New(msg)
 	}
 
