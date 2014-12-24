@@ -53,3 +53,13 @@ func (u User) Save() (User, error) {
 	}
 	return u, nil
 }
+
+func (u User) Authenticate() (User, error) {
+	err := u.DB.QueryRow("SELECT id, name FROM users WHERE email = $1 AND password = $2", u.Email, u.Password).Scan(&u.ID, &u.Name)
+	if err == sql.ErrNoRows {
+		return u, errors.New(`{"User not found"}`)
+	} else {
+		return u, err
+	}
+	return u, nil
+}

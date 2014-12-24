@@ -93,3 +93,13 @@ func TestEmailIsUnique(t *testing.T) {
 		t.Errorf("Email validation failed: ", err.Error())
 	}
 }
+
+func TestAuthentication(t *testing.T) {
+	jaspion := user()
+	jaspion.Save()
+
+	_, err := jaspion.Authenticate()
+	if err != nil {
+		t.Errorf("User authentication failed: ", err.Error())
+	}
+}
