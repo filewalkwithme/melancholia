@@ -41,13 +41,12 @@ func (u User) Save() (User, error) {
 		return u, errors.New(msg)
 	}
 
-	var id int
-	err := u.DB.QueryRow("INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id", u.Name, u.Email, u.Password).Scan(&id)
+	err := u.DB.QueryRow("INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id", u.Name, u.Email, u.Password).Scan(&u.ID)
 	if err != nil {
 		return u, err
 	}
 
-	err = u.DB.QueryRow("SELECT id, email, name FROM users WHERE id = $1", id).Scan(&u.ID, &u.Email, &u.Name)
+	err = u.DB.QueryRow("SELECT id, email, name FROM users WHERE id = $1", u.ID).Scan(&u.ID, &u.Email, &u.Name)
 	if err != nil {
 		return u, err
 	}
