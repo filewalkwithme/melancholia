@@ -3,6 +3,20 @@ melancholia
 
 Melancholia enshrines all triumph.
 
+Prepare melancholia user
+---------------------
+
+Create melancholia user
+
+```
+CREATE ROLE melancholia LOGIN SUPERUSER;
+```
+Set melancholia password
+
+```
+ALTER USER melancholia WITH PASSWORD 'm1e2l3a4';
+
+
 Prepare your database
 ---------------------
 
