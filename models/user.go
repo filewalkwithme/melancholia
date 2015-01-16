@@ -33,6 +33,10 @@ func (u User) Save() (User, error) {
 		return u, errors.New(msg)
 	}
 
+	if msg, err := v.MinSize(u.Password, 5).Message(`{"error":"Password is too short"}`); err != true {
+		return u, errors.New(msg)
+	}
+
 	if msg, err := v.Email(u.Email).Message(`{"error":"Email is not valid"}`); err != true {
 		return u, errors.New(msg)
 	}

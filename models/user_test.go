@@ -52,6 +52,16 @@ func TestNameTooLong(t *testing.T) {
 	}
 }
 
+func TestPasswordTooShort(t *testing.T) {
+	user := user()
+	user.Password = "123"
+	_, err := user.Save()
+
+	if err != nil && err.Error() != `{"error":"Password is too short"}` {
+		t.Errorf("Password validation failed: ", err.Error())
+	}
+}
+
 func TestEmailTooShort(t *testing.T) {
 	user := user()
 	user.Email = "a@a."
