@@ -103,3 +103,25 @@ func TestAuthentication(t *testing.T) {
 		t.Errorf("User authentication failed: ", err.Error())
 	}
 }
+
+func TestAuthenticationWithUnsavedUser(t *testing.T) {
+	invalid_user := user()
+	invalid_user.Email = "invalid@user.com.br"
+
+	_, err := invalid_user.Authenticate()
+	if err == nil {
+		t.Errorf("User authentication failed: Unsaved user authorized")
+	}
+}
+
+func TestAuthenticationWithInvalidPassword(t *testing.T) {
+	jaspion := user()
+	jaspion.Save()
+
+	jaspion.Password = "wrong password"
+
+	_, err := jaspion.Authenticate()
+	if err == nil {
+		t.Errorf("User authentication failed: User with wrong password authorized")
+	}
+}
