@@ -9,8 +9,11 @@ import (
 )
 
 type User struct {
-	DB                        *sql.DB
-	ID, Name, Email, Password string
+	DB *sql.DB `json:"-"`
+	ID string `json:"id"`
+	Name string `json:"name"`
+	Email string `json:"email"`
+	Password string `json:"password"`
 }
 
 func (u User) Save() (User, error) {
