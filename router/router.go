@@ -15,11 +15,9 @@ type Router struct {
 	DB *sql.DB
 }
 
-func (r Router) CreateRoutes() {
+func (r Router) CreateRoutes() *mux.Router {
 
-	gmux := mux.NewRouter()
-
-	http.Handle("/", gmux)
+	router := mux.NewRouter().StrictSlash(true)
 
 	m := map[string]map[string]ApiFunc{
 		"POST": {
@@ -30,9 +28,11 @@ func (r Router) CreateRoutes() {
 
 	for method, routes := range m {
 		for route, function := range routes {
-			gmux.HandleFunc(route, function).Methods(method)
+			router.HandleFunc(route, function).Methods(method)
 		}
 	}
+
+	return router
 }
 
 func (r Router) createUser(w http.ResponseWriter, req *http.Request) {

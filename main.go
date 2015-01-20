@@ -23,6 +23,6 @@ func setupDB() *sql.DB {
 
 func main() {
 	r := router.Router{DB: setupDB()}
-	r.CreateRoutes()
-	http.ListenAndServe(":4242", nil)
+	router := r.CreateRoutes()
+	http.ListenAndServe(":4242", router)
 }
