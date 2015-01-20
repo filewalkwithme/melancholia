@@ -15,7 +15,7 @@ Set melancholia password
 
 ```
 ALTER USER melancholia WITH PASSWORD 'm1e2l3a4';
-
+```
 
 Prepare your database
 ---------------------
