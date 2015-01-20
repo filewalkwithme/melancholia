@@ -20,7 +20,7 @@ func (u User) Save() (User, error) {
 
 	v := libs.Validation{}
 
-	if msg, err := v.MinSize(u.Name, 5).Message(`{"error":"Name is too short"}`); err != true {
+	if msg, err := v.MinSize(u.Name, 4).Message(`{"error":"Name is too short"}`); err != true {
 		return u, errors.New(msg)
 	}
 
