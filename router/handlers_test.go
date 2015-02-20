@@ -1,11 +1,11 @@
 package router
 
 import (
-		"testing"
-		"database/sql"
-		"net/http"
+	"database/sql"
+	"net/http"
+	"testing"
 
-		_ "github.com/lib/pq"
+	_ "github.com/lib/pq"
 )
 
 func setupDB() *sql.DB {
@@ -34,7 +34,7 @@ func TestPostAuthenticate(t *testing.T) {
 	}
 
 	if resp.StatusCode != 500 {
-			t.Errorf("POST /authenticate failed: Expected 500, received %d", resp.StatusCode)
+		t.Errorf("POST /authenticate failed: Expected 500, received %d", resp.StatusCode)
 	}
 }
 
@@ -46,6 +46,6 @@ func TestPostUsers(t *testing.T) {
 	}
 
 	if resp.StatusCode != 500 {
-			t.Errorf("POST /users failed: Expected 500, received %d", resp.StatusCode)
+		t.Errorf("POST /users failed: Expected 500, received %d", resp.StatusCode)
 	}
 }
