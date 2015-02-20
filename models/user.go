@@ -5,16 +5,16 @@ import (
 	"errors"
 
 	"github.com/gerep/melancholia/libs"
-	"golang.org/x/crypto/bcrypt"
 	_ "github.com/lib/pq"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
-	DB *sql.DB `json:"-"`
-	ID string `json:"id"`
-	Name string `json:"name"`
-	Email string `json:"email"`
-	Password string `json:"-"`
+	DB       *sql.DB `json:"-"`
+	ID       string  `json:"id"`
+	Name     string  `json:"name"`
+	Email    string  `json:"email"`
+	Password string  `json:"-"`
 }
 
 func (u User) Save() (User, error) {

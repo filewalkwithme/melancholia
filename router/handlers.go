@@ -1,8 +1,8 @@
 package router
 
 import (
-	"net/http"
 	"encoding/json"
+	"net/http"
 
 	"github.com/gerep/melancholia/models"
 )
@@ -17,7 +17,7 @@ func (r Router) createUser(w http.ResponseWriter, req *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err != nil {
- 		w.WriteHeader(500)
+		w.WriteHeader(500)
 		json.NewEncoder(w).Encode(err.Error())
 	} else {
 		w.WriteHeader(201)

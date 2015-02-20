@@ -19,7 +19,7 @@ func (r Router) CreateRoutes() *mux.Router {
 
 	m := map[string]map[string]Handlers{
 		"POST": {
-			"/users": r.createUser,
+			"/users":        r.createUser,
 			"/authenticate": r.authenticate,
 		},
 	}
