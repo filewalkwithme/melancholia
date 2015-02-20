@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/gerep/melancholia/libs"
+	"golang.org/x/crypto/bcrypt"
 	_ "github.com/lib/pq"
 )
 
@@ -48,7 +49,14 @@ func (u User) Save() (User, error) {
 		return u, errors.New(msg)
 	}
 
-	err := u.DB.QueryRow("INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id", u.Name, u.Email, u.Password).Scan(&u.ID)
+	password := []byte(u.Password)
+
+	hashedpassword, bcrypt_err := bcrypt.GenerateFromPassword(password, 10)
+	if bcrypt_err != nil {
+		panic(bcrypt_err)
+	}
+
+	err := u.DB.QueryRow("INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id", u.Name, u.Email, hashedpassword).Scan(&u.ID)
 	if err != nil {
 		return u, err
 	}
