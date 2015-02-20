@@ -15,9 +15,12 @@ func (r Router) createUser(w http.ResponseWriter, req *http.Request) {
 	user := models.User{Name: name, Email: email, Password: password, DB: r.DB}
 	result, err := user.Save()
 
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err != nil {
+ 		w.WriteHeader(500)
 		json.NewEncoder(w).Encode(err.Error())
 	} else {
+		w.WriteHeader(201)
 		json.NewEncoder(w).Encode(result)
 	}
 }
@@ -28,9 +31,13 @@ func (r Router) authenticate(w http.ResponseWriter, req *http.Request) {
 
 	user := models.User{Email: email, Password: password, DB: r.DB}
 	result, err := user.Authenticate()
+
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	if err != nil {
+		w.WriteHeader(500)
 		json.NewEncoder(w).Encode(err.Error())
 	} else {
+		w.WriteHeader(201)
 		json.NewEncoder(w).Encode(result)
 	}
 }
