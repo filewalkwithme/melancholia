@@ -69,8 +69,14 @@ func (u User) Save() (User, error) {
 }
 
 func (u User) Authenticate() (User, error) {
-	err := u.DB.QueryRow("SELECT id, name FROM users WHERE email = $1 AND password = $2", u.Email, u.Password).Scan(&u.ID, &u.Name)
+	var password []byte
+	err := u.DB.QueryRow("SELECT id, name, password FROM users WHERE email = $1", u.Email).Scan(&u.ID, &u.Name, &password)
 	if err == sql.ErrNoRows {
+		return u, errors.New(`{"User not found"}`)
+	}
+	current_password := []byte(u.Password)
+	err = bcrypt.CompareHashAndPassword(password, current_password)
+	if err != nil {
 		return u, errors.New(`{"User not found"}`)
 	} else {
 		return u, err
