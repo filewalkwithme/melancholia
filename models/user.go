@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"errors"
 
+	"github.com/gerep/melancholia/libs"
 	_ "github.com/lib/pq"
-	"github.com/maiconio/melancholia/libs"
 	"golang.org/x/crypto/bcrypt"
 )
 

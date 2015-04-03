@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/maiconio/melancholia/models"
+	"github.com/gerep/melancholia/models"
 )
 
 func (r Router) createUser(w http.ResponseWriter, req *http.Request) {

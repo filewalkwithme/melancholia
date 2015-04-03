@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"net/http"
 
+	"github.com/gerep/melancholia/router"
 	_ "github.com/lib/pq"
-	"github.com/maiconio/melancholia/router"
 )
 
 func setupDB() *sql.DB {
