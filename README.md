@@ -1,6 +1,8 @@
 melancholia
 ===========
 
+[![Mini-ci Build Status](http://maicolino-lb-apps-442062849.sa-east-1.elb.amazonaws.com:8888/repositories/maiconio/melancholia/refs/heads/master/badge)](http://maicolino-lb-apps-442062849.sa-east-1.elb.amazonaws.com:8888/repositories/maiconio/melancholia/refs/heads/master/badge)
+
 Melancholia enshrines all triumph.
 
 Prepare melancholia user

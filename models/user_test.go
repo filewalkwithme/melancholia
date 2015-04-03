@@ -1,13 +1,14 @@
 package models
 
 import (
-		"testing"
-		"database/sql"
-		_ "github.com/lib/pq"
+	"database/sql"
+	"testing"
+
+	_ "github.com/lib/pq"
 )
 
 func setupDB() *sql.DB {
-	db, err := sql.Open("postgres", "user=melancholia password='m1e2l3a4' dbname=melancholia_test sslmode=disable")
+	db, err := sql.Open("postgres", "user=docker password='docker' dbname=docker sslmode=disable")
 	if err != nil {
 		panic(err)
 	}
@@ -21,10 +22,22 @@ func setupDB() *sql.DB {
 
 func eraseDB() {
 	db := setupDB()
+	createScript :=
+		`DROP TABLE IF EXISTS "public"."users";
+CREATE TABLE "public"."users" (
+	id serial primary key, -- Sequence structure is created automatically when using 'serial'
+	name varchar(40) NOT NULL COLLATE "default",
+	email varchar(40) NOT NULL COLLATE "default",
+	password varchar(60)
+)
+WITH (OIDS=FALSE);`
+	db.Exec(createScript)
+
 	db.Exec("TRUNCATE users")
+
 }
 
-func user() User{
+func user() User {
 	return User{Name: "Jaspion", Email: "jaspion@daileon", Password: "123456", DB: setupDB()}
 }
 
@@ -38,7 +51,7 @@ func TestNameTooShort(t *testing.T) {
 	_, err := user.Save()
 
 	if err != nil && err.Error() != `{"error":"Name is too short"}` {
-			t.Errorf("Name validation failed: ", err.Error())
+		t.Errorf("Name validation failed: %v", err.Error())
 	}
 }
 
@@ -48,7 +61,7 @@ func TestNameTooLong(t *testing.T) {
 	_, err := user.Save()
 
 	if err != nil && err.Error() != `{"error":"Name is too long"}` {
-		t.Errorf("Name validation failed: ", err.Error())
+		t.Errorf("Name validation failed: %v", err.Error())
 	}
 }
 
@@ -58,7 +71,7 @@ func TestPasswordTooShort(t *testing.T) {
 	_, err := user.Save()
 
 	if err != nil && err.Error() != `{"error":"Password is too short"}` {
-		t.Errorf("Password validation failed: ", err.Error())
+		t.Errorf("Password validation failed: %v", err.Error())
 	}
 }
 
@@ -68,7 +81,7 @@ func TestEmailTooShort(t *testing.T) {
 	_, err := user.Save()
 
 	if err != nil && err.Error() != `{"error":"Email is too short"}` {
-		t.Errorf("Email validation failed: ", err.Error())
+		t.Errorf("Email validation failed: %v", err.Error())
 	}
 }
 
@@ -78,7 +91,7 @@ func TestEmailTooLong(t *testing.T) {
 	_, err := user.Save()
 
 	if err != nil && err.Error() != `{"error":"Email is too long"}` {
-		t.Errorf("Email validation failed: ", err.Error())
+		t.Errorf("Email validation failed: %v", err.Error())
 	}
 }
 
@@ -88,7 +101,7 @@ func TestEmailNotValid(t *testing.T) {
 	_, err := user.Save()
 
 	if err != nil && err.Error() != `{"error":"Email is not valid"}` {
-		t.Errorf("Email validation failed: ", err.Error())
+		t.Errorf("Email validation failed: %v", err.Error())
 	}
 }
 
@@ -100,7 +113,7 @@ func TestEmailIsUnique(t *testing.T) {
 	_, err := jiban.Save()
 
 	if err != nil && err.Error() != `{"error":"Email is taken"}` {
-		t.Errorf("Email validation failed: ", err.Error())
+		t.Errorf("Email validation failed: %v", err.Error())
 	}
 }
 
@@ -110,15 +123,15 @@ func TestAuthentication(t *testing.T) {
 
 	_, err := jaspion.Authenticate()
 	if err != nil {
-		t.Errorf("User authentication failed: ", err.Error())
+		t.Errorf("User authentication failed: %v", err.Error())
 	}
 }
 
 func TestAuthenticationWithUnsavedUser(t *testing.T) {
-	invalid_user := user()
-	invalid_user.Email = "invalid@user.com.br"
+	invalidUser := user()
+	invalidUser.Email = "invalid@user.com.br"
 
-	_, err := invalid_user.Authenticate()
+	_, err := invalidUser.Authenticate()
 	if err == nil {
 		t.Errorf("User authentication failed: Unsaved user authorized")
 	}
